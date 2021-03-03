@@ -100,11 +100,6 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
         showCurrentDessert()
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        Timber.i("onSaveInstanceState Called")
-    }
-
     /**
      * Determine which dessert to show.
      */
@@ -154,6 +149,12 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
             R.id.shareMenuButton -> onShare()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("key_revenue", revenue)
+        Timber.i("onSaveInstanceState Called")
     }
 
     override fun onStart() {
