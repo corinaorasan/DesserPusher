@@ -18,6 +18,7 @@ package com.example.android.dessertpusher
 
 import android.content.ActivityNotFoundException
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -34,6 +35,7 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
     private var revenue = 0
     private var dessertsSold = 0
     private lateinit var dessertTimer: DessertTimer
+
     // Contains all the views
     private lateinit var binding: ActivityMainBinding
 
@@ -73,8 +75,11 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
         binding.dessertButton.setOnClickListener {
             onDessertClicked()
         }
-        dessertTimer = DessertTimer()
+        dessertTimer = DessertTimer(this.lifecycle)
         // Set the TextViews to the right values
+
+        if (savedInstanceState != null) revenue = savedInstanceState.getInt("key_revenue", 0)
+
         binding.revenue = revenue
         binding.amountSold = dessertsSold
 
@@ -147,6 +152,12 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
             R.id.shareMenuButton -> onShare()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("key_revenue", revenue)
+        Timber.i("onSaveInstanceState Called")
     }
 
     override fun onStart() {
